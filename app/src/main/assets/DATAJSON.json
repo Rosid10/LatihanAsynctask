@@ -1,0 +1,17 @@
+
+{
+        "users":
+    [
+        {
+            "id":1,
+            "nama":"Rosyid",
+            "email":"rosyid593@gmail.com"
+        },
+        {
+    
+            "id":2,
+            "nama":"jamal",
+            "email":"jamaltaksesuai@gmail.com"
+        }
+    ]
+}
