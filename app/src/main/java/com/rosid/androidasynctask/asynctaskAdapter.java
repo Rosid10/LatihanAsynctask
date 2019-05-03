@@ -33,6 +33,7 @@ public class asynctaskAdapter extends RecyclerView.Adapter<asynctaskAdapter.Usse
         holder.txtusername.setText(dataList.get(position).getUsername());
         holder.txtEmail.setText(dataList.get(position).getEmail());
         holder.txtAddr.setText(dataList.get(position).getAddr());
+        holder.txtge.setText(dataList.get(position).getGe());
 
     }
     @Override
@@ -41,7 +42,7 @@ public class asynctaskAdapter extends RecyclerView.Adapter<asynctaskAdapter.Usse
     }
 
     public class UsserViewHolder extends RecyclerView.ViewHolder{
-        private TextView txtID, txtNama, txtusername, txtEmail, txtAddr;
+        private TextView txtID, txtNama, txtusername, txtEmail, txtAddr, txtge;
 
         public UsserViewHolder(View itemView) {
             super(itemView);
@@ -50,6 +51,7 @@ public class asynctaskAdapter extends RecyclerView.Adapter<asynctaskAdapter.Usse
             txtusername = (TextView) itemView.findViewById(R.id.textUsername);
             txtEmail = (TextView) itemView.findViewById(R.id.textEmail);
             txtAddr = (TextView) itemView.findViewById(R.id.textAddr);
+            txtge = (TextView) itemView.findViewById(R.id.textGe);
         }
     }
 }

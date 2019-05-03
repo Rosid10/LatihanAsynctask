@@ -2,6 +2,7 @@ package com.rosid.androidasynctask;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,7 +28,10 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    String id, name, username, email,street,suite,city,zipcode,addr;
+    String id, name, username, email,street,suite,city,zipcode,addr,lat,lng,ge;
+
+    public static final int CONNECTION_TIMEOUT = 10000;
+    public static final int READ_TIMEOUT = 15000;
     private RecyclerView recycleView;
     private asynctaskAdapter adapter;
     private ArrayList<usserAsynctask> usersArrayList;
@@ -35,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     HttpURLConnection connection = null;
     BufferedReader reader = null;
     ProgressDialog progressDialog;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +47,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         usersArrayList = new ArrayList<>();
         button = (Button) findViewById(R.id.btn_data);
+        mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeContainer);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
-        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onRefresh() {
                 AsyncTaskRunner task = new AsyncTaskRunner();
                 task.execute();
             }
        });
+
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                AsyncTaskRunner task = new AsyncTaskRunner();
+                task.execute();
+            }
+        });
 
     }
 
@@ -132,9 +145,14 @@ public class MainActivity extends AppCompatActivity {
                     city = address.getString("city");
                     zipcode = address.getString("zipcode");
 
-                    addr = street+", "+suite+", "+city+", "+zipcode;
+                    JSONObject geo = address.getJSONObject("geo");
+                    lat = geo.getString("lat");
+                    lng = geo.getString("lng");
 
-                    usersArrayList.add(new usserAsynctask(id, name, username,email,addr));
+                    addr = street+", "+suite+", "+city+", "+zipcode;
+                    ge = lat+", "+lng;
+
+                    usersArrayList.add(new usserAsynctask(id, name, username, email, addr, ge));
 
                 }
 
@@ -146,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
             protected void onPostExecute(String result) {
+            mSwipeRefreshLayout.setRefreshing(false);
                 progressDialog.dismiss();
                 recycleView = (RecyclerView) findViewById(R.id.recycle_view);
 
@@ -160,7 +179,4 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-
-
-
 }
